@@ -1,74 +1,137 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import React from "react";
+import styled from "styled-components/native";
+import { View, Text, TouchableOpacity } from "react-native";
+import { ProgressBar } from "@/components/ProgressBar";
+import { SafeContainer } from "../styles";
+import { Ionicons } from "@expo/vector-icons";
+import { Href, router } from "expo-router";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-
+// Componente Principal
 export default function HomeScreen() {
+  const handleRedirectTo = (route: Href) => {
+    console.log("Redirecionando para a rota", route);
+    router.push(route);
+  }
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <SafeContainer>
+      {/* Barra de Progresso */}
+      <ProgressBarContainer>
+        <ProgressBar />
+      </ProgressBarContainer>
+
+      {/* Botão de Cadastrar Treino */}
+      <HighlightButton>
+        <Ionicons name="barbell-outline" size={30} color="#fff" />
+        <HighlightButtonText>Adicionar Treino</HighlightButtonText>
+      </HighlightButton>
+
+      {/* Botões de Ações */}
+      <ActionList>
+        <ActionButton onPress={() => handleRedirectTo('/screens/exercise')}>
+          <IconWrapper>
+            <Ionicons name="create-outline" size={24} color="#007bff" />
+          </IconWrapper>
+          <ActionText>Cadastro de Exercício</ActionText>
+        </ActionButton>
+        <ActionButton>
+          <IconWrapper>
+            <Ionicons name="calendar-outline" size={24} color="#007bff" />
+          </IconWrapper>
+          <ActionText>Cadastrar Semana</ActionText>
+        </ActionButton>
+        <ActionButton>
+          <IconWrapper>
+            <Ionicons name="shirt-outline" size={24} color="#007bff" />
+          </IconWrapper>
+          <ActionText>Cadastrar Acessórios</ActionText>
+        </ActionButton>
+        <ActionButton>
+          <IconWrapper>
+            <Ionicons name="trophy-outline" size={24} color="#007bff" />
+          </IconWrapper>
+          <ActionText>Recorde Pessoal</ActionText>
+        </ActionButton>
+        <ActionButton>
+          <IconWrapper>
+            <Ionicons name="stats-chart-outline" size={24} color="#007bff" />
+          </IconWrapper>
+          <ActionText>Relatórios</ActionText>
+        </ActionButton>
+        <ActionButton>
+          <IconWrapper>
+            <Ionicons name="podium-outline" size={24} color="#007bff" />
+          </IconWrapper>
+          <ActionText>Ranking</ActionText>
+        </ActionButton>
+      </ActionList>
+    </SafeContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+/* Barra de Progresso */
+const ProgressBarContainer = styled.View`  
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 30px;
+`;
+
+/* Botão de Destaque */
+const HighlightButton = styled.TouchableOpacity`
+  width: 100px;
+  height: 100px;
+  background-color: #007bff;
+  border-radius: 50px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  flex-direction: column; /* Alinha ícone e texto */
+  border: 2px solid #e6f7ff;
+`;
+
+const HighlightButtonText = styled.Text`
+  font-size: 18px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+`;
+
+/* Botões de Ação */
+const ActionList = styled.View`
+  width: 100%;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const ActionButton = styled.TouchableOpacity`
+  width: 48%;
+  height: 80px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  elevation: 3;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+`;
+
+const IconWrapper = styled.View`
+  width: 50px;
+  height: 50px;
+  background-color: #e6f7ff;
+  border-radius: 25px;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+`;
+
+const ActionIcon = styled.Text`
+  font-size: 24px;
+`;
+
+const ActionText = styled.Text`
+  font-size: 16px;
+  color: #333;
+  flex: 1;
+`;
